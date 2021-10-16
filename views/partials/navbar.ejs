@@ -1,0 +1,5 @@
+<nav>
+    <a href="/">HOME</a>
+    <a href="/auth/google"><%= !locals.user? 'Sign in with Google' : '' %></a>
+    <a href="/logout"><%= locals.user? 'LOG OUT' : '' %></a>
+</nav>
