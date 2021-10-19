@@ -5,6 +5,7 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const methodOverride = require('method-override');
+const fileUpload = require('express-fileupload')
 const logger = require('morgan');
 
 require('dotenv').config();
@@ -13,6 +14,9 @@ require('./config/passport');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
+const communitiesRouter = require('./routes/communities');
+const postsRouter = require('./routes/posts');
+const activitiesRouter = require('./routes/activities');
 
 const app = express();
 
@@ -32,10 +36,18 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
+app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/'
+  })
+)
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/communities', communitiesRouter);
+app.use('/', postsRouter);
+app.use('/', activitiesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
