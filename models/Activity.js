@@ -1,8 +1,11 @@
 const mongoose = require('mongoose')
 
+const User = require('./User')
+const Community = require('./Community')
+
 const activitySchema = new mongoose.Schema({
     name: String,
-    images: [String],
+    images: [Buffer],
     date: Date,
     place: String,
     description: String,
@@ -26,6 +29,27 @@ const activitySchema = new mongoose.Schema({
     }
 }, {
     timestamps: true
+})
+
+activitySchema.pre('remove', async function(next) {
+    try {
+        await User.updateMany(
+            {activities: {'$in': this._id}},
+            { '$pull': { activities: { '$in': [this._id] }  } }
+        )
+        await Community.updateMany(
+            {activities: {'$in': this._id}},
+            { '$pull': { activities: { '$in': [this._id] } } }
+        )
+        await Community.updateMany(
+            {activities: {'$in': this._id}},
+            { '$pull': { posts: { activity: this._id } } }
+        )
+        next()
+    } catch(error) {
+        console.log(error)
+        next()
+    }
 })
 
 module.exports = mongoose.model('Activity', activitySchema)

@@ -8,7 +8,6 @@ module.exports = {
 
 const Community = require('../models/Community')
 const Activity = require('../models/Activity')
-const User = require('../models/User')
 
 async function create(req, res) {
     try {
@@ -21,9 +20,8 @@ async function create(req, res) {
         activity.communities.push(community._id)
         await activity.save()
 
-        const creator = await User.findById(req.user._id)
-        creator.activities.push(activity._id)
-        await creator.save()
+        req.user.activities.push(activity._id)
+        await req.user.save()
 
         community.activities.push(activity._id)       
         await community.save()
@@ -45,8 +43,13 @@ async function update(req, res) {
 }
 
 async function deleteActivity(req, res) {
-    const activity = await Activity.findByIdAndDelete(req.params.id)
-    res.redirect(`/communities/${activity.origin.community}`)
+    try {
+        const activity = await Activity.findById(req.params.id)
+        await activity.remove()
+        res.redirect(`/communities/${activity.origin.community}`)
+    } catch(error) {
+        res.redirect(`/activities/${req.params.id}`)
+    }
 }
 
 async function joinActivity(req, res) {
@@ -54,8 +57,7 @@ async function joinActivity(req, res) {
     activity.participating.push(req.user._id)
     await activity.save()
 
-    const participant = await User.findById(req.user._id)
-    participant.activities.push(activity._id)
+    req.user.activities.push(activity._id)
     await participant.save()
 
 

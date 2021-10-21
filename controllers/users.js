@@ -34,7 +34,9 @@ async function update(req, res) {
 
 async function deleteUser(req, res) {
     try {
-        await User.findByIdAndDelete(req.params.id)
+        const user = await User.findById(req.params.id)
+        await user.remove()
+        res.redirect(`/signup`)
     } catch(error) {
         res.redirect(`users/${req.params.id}/edit`)
     }

@@ -3,10 +3,12 @@ const router = express.Router();
 
 const activitiesCtrl = require('../controllers/activities');
 
-router.post('/communities/:id/activities', activitiesCtrl.create);
-router.post('/activities/:id/join', activitiesCtrl.join);
-router.get('/activities/:id', activitiesCtrl.show);
-router.put('/activities/:id', activitiesCtrl.update);
-router.delete('/activities/:id', activitiesCtrl.delete);
+const isLoggedIn = require('../middlewares/isLoggedIn')
+
+router.post('/communities/:id/activities', isLoggedIn, activitiesCtrl.create);
+router.post('/activities/:id/join', isLoggedIn, activitiesCtrl.join);
+router.get('/activities/:id', isLoggedIn, activitiesCtrl.show);
+router.put('/activities/:id', isLoggedIn, activitiesCtrl.update);
+router.delete('/activities/:id', isLoggedIn, activitiesCtrl.delete);
 
 module.exports = router

@@ -3,10 +3,12 @@ const router = express.Router();
 
 const usersCtrl = require('../controllers/users')
 
+const isLoggedIn = require('../middlewares/isLoggedIn')
+
 /* GET users listing. */
 router.post('/', usersCtrl.create);
-router.get('/:id/edit', usersCtrl.edit);
-router.put('/:id', usersCtrl.update);
-router.delete('/:id', usersCtrl.delete);
+router.get('/:id/edit', isLoggedIn, usersCtrl.edit);
+router.put('/:id', isLoggedIn, usersCtrl.update);
+router.delete('/:id', isLoggedIn, usersCtrl.delete);
 
 module.exports = router;

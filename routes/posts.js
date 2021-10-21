@@ -3,9 +3,11 @@ const router = express.Router();
 
 const postsCtrl = require('../controllers/posts');
 
-router.post('/communities/:id/posts', postsCtrl.create);
-router.get('/posts/:id', postsCtrl.show);
-router.put('/posts/:id', postsCtrl.update);
-router.delete('/posts/:id', postsCtrl.delete);
+const isLoggedIn = require('../middlewares/isLoggedIn')
+
+router.post('/communities/:id/posts', isLoggedIn, postsCtrl.create);
+router.get('/posts/:id', isLoggedIn, postsCtrl.show);
+router.put('/posts/:id', isLoggedIn, postsCtrl.update);
+router.delete('/posts/:id', isLoggedIn, postsCtrl.delete);
 
 module.exports = router

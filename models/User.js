@@ -1,6 +1,8 @@
 const mongoose = require('mongoose')
-const validator = require('validator')
 const bcrypt = require('bcryptjs')
+
+const Community = require('./Community')
+const Activity = require('./Activity')
 
 const userSchema = new mongoose.Schema({
     name: String,
@@ -10,12 +12,7 @@ const userSchema = new mongoose.Schema({
         unique: true,
         required: true,
         trim: true,
-        lowercase: true,
-        validate(value) {
-          if(!validator.isEmail(value)) {
-            throw new Error('Email is not valid')
-          }
-        }
+        lowercase: true
     },
     dateOfBirth: Date,
     avatar: Buffer,
@@ -39,12 +36,29 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 })
 
-//Hash the plain text password without saving
+//Hash the plain text password before saving
 userSchema.pre('save', async function(next) {
-    const user = this
-    user.dateOfBirth = new Date(user.dateOfBirth)
-    user.password = await bcrypt.hash(user.password, 8)
+    if(this.password) {
+        this.dateOfBirth = new Date(this.dateOfBirth)
+        this.password = await bcrypt.hash(this.password, process.env.SECRET)
+    }
     next()
+})
+
+//Cascade delete
+userSchema.pre('remove', async function(next) {
+    try {
+        await Activity.remove({ 'origin.user': this._id })
+        await Community.remove({creator: this._id})
+        await Community.updateMany(
+            {creator: this._id},
+            {'$pull': { posts: { from: this._id } } }
+        )
+        next()
+    } catch(error) {
+        console.log(error)
+        next()
+    }
 })
 
 //create model method
