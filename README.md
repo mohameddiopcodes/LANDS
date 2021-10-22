@@ -17,3 +17,8 @@ A simple way to create communities and organize them.
 # Getting Started
 Check out the [Trello Board](https://trello.com/b/SDqMqNPr/project-2-user-stories).
 You can also access the app [here](https://lands-connect.herokuapp.com/)
+
+# Planned Future Improvements
+- Better activity integration
+- Private communities
+- Private messaging
