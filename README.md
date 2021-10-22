@@ -7,6 +7,7 @@ A simple way to create communities and organize them.
 # Screenshots
 
 <img src='./public/images/screenshot.png'>
+<img src='./public/images/screenshot2.png'>
 
 # Technologies Used
 - Nodejs (Express, Mongoose & EJS)
