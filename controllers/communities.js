@@ -45,7 +45,7 @@ function show(req, res) {
                     console.log(error)
                     res.redirect('/communities')
                 }
-                community.posts && community.posts.sort().reverse()
+                community.posts && community.posts.sort()
                 res.render('communities/show', { community, moment })
             })
 }
