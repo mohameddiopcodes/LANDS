@@ -45,7 +45,14 @@ function show(req, res) {
                     console.log(error)
                     res.redirect('/communities')
                 }
-                community.posts && community.posts.sort()
+                if(community.posts) {
+                    community.posts.sort((a, b) => {
+                        if(moment(a.createdAt).isAfter(b.createdAt)) {
+                            return 1
+                        }
+                        return -1
+                    })
+                }
                 res.render('communities/show', { community, moment })
             })
 }
