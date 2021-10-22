@@ -3,25 +3,16 @@
 
 <div class='container'>
     <div id='home-actions'>
-        <div class="action">
-            <img src="/images/unity.png" alt="">
+        <div class="action-cover">
             <h2>Create Community</h2>
-            <a class='overlay-link' href="/communities/new"></a>
+            <form action="/communities" method='POST' class='dashboard-form'>
+                <label for="name">Name</label>
+                <input type="text" name='name' placeholder='Name' autocomplete='off'>
+                <input type="submit" value="CREATE">
+            </form>
+            <a class='return-link' href="/">&#x2190;</a>
         </div>
-        <div class="action">
-            <img src="/images/business.png" alt="">
-            <h2>Sell Items</h2>
-            <a class='overlay-link' href="/businesses/new"></a>
-        </div>
-        <div class="action">
-            <img src="/images/admin.png" alt="">
-            <h2>Account Settings</h2>
-            <a class='overlay-link' href="/users/<%= locals.user._id %>/edit"></a>
-        </div>
-        <div id='insert-form'></div>
     </div>
 </div>
-
-<h1>New Community</h1>
 
 <%- include('../partials/footer') %>

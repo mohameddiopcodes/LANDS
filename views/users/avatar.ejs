@@ -1,0 +1,18 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class='container'>
+    <div id='home-actions'>
+        <div class="action-cover">
+            <h2>Upload Avatar</h2>
+            <form enctype="multipart/form-data" action="/users/<%= locals.user? locals.user._id:'' %>/avatar" method='POST' class='dashboard-form'>
+                <label for="avatar">Avatar</label>
+                <input type="file" name='avatar'>
+                <input type="submit" value="UPLOAD">
+            </form>
+            <a class='return-link' href="/">&#x2190;</a>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

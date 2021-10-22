@@ -1,0 +1,23 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class='container'>
+    <div id='home-actions'>
+        <div class="action-cover">
+            <h2>Edit Community</h2>
+            <form enctype="multipart/form-data" action="/communities/<%= community._id %>/images" method='POST' class='dashboard-form'>
+                <label for="image">Image</label>
+                <input type="file" name='image'>
+                <input type="submit" value="UPLOAD">
+            </form>
+            <form action="/communities/<%= community._id %>?_method=PUT" method='POST' class='dashboard-form'>
+                <label for="name">Name</label>
+                <input type="text" name='name' placeholder='Name' value='<%= community.name %>' autocomplete='off'>
+                <input type="submit" value="UPDATE">
+            </form>
+            <a class='return-link' href="/communities/<%= community._id %>">&#x2190;</a>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

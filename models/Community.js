@@ -42,18 +42,5 @@ const communitySchema = new mongoose.Schema({
     timestamps: true
 })
 
-communitySchema.pre('remove', async function(next) {
-    try {
-        await Activity.remove({ 'origin.community': this._id })
-        await User.updateMany(
-            {communities: { '$in': this._id }},
-            { '$pull': {  communities : { '$in': [this._id] } } }
-        )
-        next()
-    } catch(error) {
-        console.log(error)
-        next()
-    }
-})
 
 module.exports = mongoose.model('Community', communitySchema)

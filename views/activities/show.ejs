@@ -1,0 +1,30 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<div class="container">
+    <div class='edit-community'>
+        <h1>Activity</h1>
+        <div>
+            <a href="/activities/<%= activity._id %>/edit">EDIT ACTIVITY</a>
+        </div>
+    </div>
+    <table>
+        <thead>
+            <th>What?</th>
+            <th>Where?</th>
+            <th>When?</th>
+            <th>No Participants</th>
+            <th>Description</th>
+            <th>Gallery</th>
+        </thead>
+        <tbody>
+            <td><%= activity.name %></td>
+            <td><%= activity.place.address %></td>
+            <td><%= activity.date %></td>
+            <td><%= activity.participating.length %></td>
+            <td><%= activity.description %></td>
+            <td><%= activity.images %></td>
+        </tbody>
+    </table>
+</div>
+
+<%- include('../partials/footer') %>

@@ -5,7 +5,6 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const methodOverride = require('method-override');
-const fileUpload = require('express-fileupload')
 const logger = require('morgan');
 
 require('dotenv').config();
@@ -36,11 +35,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
-app.use(fileUpload({
-    useTempFiles : true,
-    tempFileDir : '/tmp/'
-  })
-)
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

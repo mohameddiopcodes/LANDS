@@ -1,0 +1,17 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<div class="container">
+    <div class='grid'>
+        <% communities.forEach(c => { %>
+            <div class='action'>
+                <% if(c.image) { %>
+                <img src="data:image/png;base64, <%= c.image.toString('base64') %>" alt="">
+                <% } %>
+                <p><%= c.name %></p>
+                <a href="communities/<%= c._id %>" class="overlay-link"></a>
+            </div>
+        <% }) %>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

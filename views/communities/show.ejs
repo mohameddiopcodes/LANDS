@@ -1,0 +1,49 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+<div class="container scroll">
+    <a name="top"></a>
+    <div class="upload-img">
+        <% if(community && !community.image) { %>
+            <h2>+</h2>
+            <p>Add an image</p>
+        <% } else { %>
+            <img class='community-image' src="data:image/png;base64, <%= community ? community.image.toString('base64'):'' %>" alt="">
+        <% } %>
+        <a href="/communities/<%= community._id %>/edit" class="overlay-link"></a>
+    </div>
+    <div class='edit-community'>
+        <h1><%= community.name %></h1>
+        <div>
+            <a href="/communities/<%= community._id %>/edit">EDIT COMMUNITY</a>
+            <a href="/communities/<%= community._id %>/activities/new">CREATE ACTIVITY</a>
+        </div>
+    </div>
+    <div class='posts'>
+        <div class="post-container">
+        <% community.posts.forEach( post => { %>
+            <div class='post'>
+                <p class='name'><%= post.from.name %></p>
+                <p class='content'><%= post.content %></p>
+                <p class='posted-on'><%= moment(post.createdAt).format('LLLL') %></p>
+                <% if(post.from._id.toString() === locals.user._id.toString()) { %>
+                    <a class='edit-link' href="/posts/<%= post._id %>/edit">edit post</a>
+                <% } %>
+                <% if(post.activity) { %>
+                    <div class='calendar-container'>
+                        <img src="/images/calendar.png" alt="activity">
+                        <a href="/activities/<%= post.activity %>" class='overlay-link'></a>
+                    </div>
+                <% } %>
+            </div>
+        <% }) %>
+        </div>
+        <form class='post-form' action="/communities/<%= community._id %>/posts" method="POST" autocomplete="off">
+            <input type="text" name='content'>
+            <input type="submit" value="POST">
+        </form>
+    </div>
+    <a class='top' href="#top">↑</a>
+</div>
+
+<script src='/javascripts/autoScroll.js'></script>
+<%- include('../partials/footer') %>

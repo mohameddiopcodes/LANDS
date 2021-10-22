@@ -1,11 +1,26 @@
 <%- include('./partials/header') %>
 <%- include('./partials/navbar') %>
-<p>log in or create an account!</p>
-<form action="">
-    <input type="text">
-    <input type="text">
-    <input type="submit" value="SIGN UP">
-</form>
-<a id='google-auth' href="/auth/google"></a>
+
+<div class="container">
+    <form action="/users" method='POST' class='first-form'>
+        <h2>SIGN UP</h2>
+        <label for="email">Email</label>
+        <input type="text" name='email' autocomplete="off">
+        <label for="password">Password</label>
+        <input type="password" name='password' autocomplete="off">
+        <div class='first-form-btns'>
+            <div class='local'>
+                <input type="submit" value="CREATE ACCOUNT">
+                <a href="/login">already have an account ?</a>
+            </div>
+            <div class="google">
+                <img src="/images/google.png" alt="google signup">
+                <p>Sign up with Google</p>
+                <a href="/auth/google" class="overlay-link"></a>
+            </div>
+        </div>
+    </form>
+    <a id='google-auth' href="/auth/google"></a>
+</div>
 
 <%- include('./partials/footer') %>

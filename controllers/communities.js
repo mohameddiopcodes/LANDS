@@ -6,13 +6,17 @@ module.exports = {
     edit,
     update,
     delete: deleteCommunity,
-    join: joinCommunity
+    join: joinCommunity,
+    upload
 }
 
 const Community = require('../models/Community')
 
+const moment = require('moment')
+const sharp = require('sharp')
+
 async function index(req, res) {
-    const communities = await Community.find()
+    const communities = await Community.find().limit(12)
     res.render('communities/index', { communities })
 }
 
@@ -22,36 +26,41 @@ async function newCommunity(req, res) {
 
 async function create(req, res) {
     try {
-        req.body.image = Buffer.from(req.files.image)
         req.body.creator = req.user._id
         const community = new Community(req.body)
         await community.save()
         res.redirect('/communities')
     } catch(error) {
+        console.log(error)
         res.redirect('/communities/new')
     }
 }
 
-async function show(req, res) {
-    try {
-        const community = await Community.findById(req.params.id)
-        res.render('communities/show', { community })
-    } catch(e) {
-        res.redirect('/communities')
-    }
+function show(req, res) {
+        Community   
+            .findById(req.params.id)
+            .populate('posts.from')
+            .exec((error, community) => {
+                if(error) {
+                    console.log(error)
+                    res.redirect('/communities')
+                }
+                community.posts && community.posts.sort().reverse()
+                res.render('communities/show', { community, moment })
+            })
 }
 
 async function edit(req, res) {
-    res.render('communities/edit')
+    const community = await Community.findById(req.params.id)
+    res.render('communities/edit', { community })
 }
 
 async function update(req, res) {
     try {
-        req.body.image = Buffer.from(req.files.image)
-        const community = await Community.findByIdAndUpdate(req.params.id, req.body)
-        await community.save()
+        await Community.findByIdAndUpdate(req.params.id, req.body)
         res.redirect(`/communities/${req.params.id}`)
     } catch(error) {
+        console.log(error)
         res.redirect(`/communities/${req.params.id}/edit`)
     }
 }
@@ -75,4 +84,17 @@ async function joinCommunity(req, res) {
     req.user.save()
     
     res.redirect(`/communities/${req.params.id}`)
+}
+
+async function upload(req, res) {
+    try {
+        const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
+        const community = await Community.findById(req.params.id)
+        community.image = buffer
+        await community.save()
+        res.redirect('/communities')
+    } catch(error) {
+        console.log(error)
+        res.redirect('/')
+    }
 }

@@ -1,0 +1,21 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class='container'>
+    <div id='home-actions'>
+        <div class="action-cover">
+            <h2>Edit Post</h2>
+            <form action="/posts/<%= post._id %>?_method=PUT" method='POST' class='dashboard-form'>
+                <label for="content">Content</label>
+                <textarea name="content"><%= post.content %></textarea>
+                <input type="submit" value="UPDATE">
+            </form>
+            <form class='delete-btn' action="/posts/<%= post._id %>?_method=DELETE" method='POST'>
+                <input type="submit" value="Delete post">
+            </form>
+            <a class='return-link' href="/communities/<%= communityId %>">&#x2190;</a>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

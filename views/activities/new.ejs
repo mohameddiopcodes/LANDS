@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<div class='container'>
+    <div id='home-actions'>
+        <div class="action-cover">
+            <h2>Create Activity</h2>
+            <form spellcheck="false" action="/communities/<%= communityId %>/activities" method='POST' class='dashboard-form'>
+                <label for="name">Name</label>
+                <input type="text" name='name' autocomplete='off'>
+                <label for="date">Date</label>
+                <input type="datetime-local" name="date" autocomplete='off'>
+                <label for="address">Address</label>
+                <input type="text" name="address" autocomplete='off'>
+                <label for="city">City</label>
+                <input type="text" name="city" autocomplete='off'>
+                <label for="state">State</label>
+                <input type="text" name="state" autocomplete='off'>
+                <label for="phoneNumber">Description</label>
+                <textarea name="description"></textarea>
+                <input type="submit" value="CREATE">
+            </form>
+            <a class='return-link' href="/communities/<%= communityId %>">&#x2190;</a>
+        </div>
+    </div>
+</div>
+
+<%- include('../partials/footer') %>

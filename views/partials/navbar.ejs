@@ -2,12 +2,16 @@
     <div class='nav-left'>
         <h1 id='logo'>LAND$</h1>
         <a href="/"><%= locals.user? 'HOME' : '' %></a>
-        <a href="/communities/new"><%= locals.user? 'COMMUNITIES' : '' %></a>
-        <a href="/activities/new"><%= locals.user? 'ACTIVITIES' : '' %></a>
+        <a href="/communities"><%= locals.user? 'COMMUNITIES' : '' %></a>
     </div>
     <div class="nav-right">
         <a href="/signup"><%= !locals.user? 'SIGN UP' : '' %></a>
-        <img id='avatar' src="<%= locals.user? locals.user.avatar : '' %>" alt="">
+        <div class='avatar-container'>
+            <% if(locals.user) { %>
+            <img id='avatar' src="<%= locals.user.avatar %>" alt="">
+            <% } %>
+            <a href="/users/<%= locals.user? locals.user._id : '' %>/avatar" class="overlay-link"></a>
+        </div>
         <a id='auth-btn' href="<%= locals.user? '/logout' : '/login' %>"><%= locals.user? 'LOG OUT' : 'LOG IN' %></a>
     </div>
 </nav>

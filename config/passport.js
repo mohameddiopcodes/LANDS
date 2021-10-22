@@ -16,7 +16,6 @@ passport.use(
         try {
             let user = await User.findOne({googleId: profile.id})
             if(user) return next(null, user)
-    
             user = new User({
                 name: profile.displayName,
                 googleId: profile.id,

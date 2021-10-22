@@ -40,25 +40,9 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function(next) {
     if(this.password) {
         this.dateOfBirth = new Date(this.dateOfBirth)
-        this.password = await bcrypt.hash(this.password, process.env.SECRET)
+        this.password = await bcrypt.hash(this.password, parseInt(process.env.SECRET))
     }
     next()
-})
-
-//Cascade delete
-userSchema.pre('remove', async function(next) {
-    try {
-        await Activity.remove({ 'origin.user': this._id })
-        await Community.remove({creator: this._id})
-        await Community.updateMany(
-            {creator: this._id},
-            {'$pull': { posts: { from: this._id } } }
-        )
-        next()
-    } catch(error) {
-        console.log(error)
-        next()
-    }
 })
 
 //create model method

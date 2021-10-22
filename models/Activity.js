@@ -7,7 +7,11 @@ const activitySchema = new mongoose.Schema({
     name: String,
     images: [Buffer],
     date: Date,
-    place: String,
+    place: {
+        address: String,
+        city: String,
+        state: String,
+    },
     description: String,
     participating: {
         type: [mongoose.Schema.Types.ObjectId],
@@ -29,27 +33,6 @@ const activitySchema = new mongoose.Schema({
     }
 }, {
     timestamps: true
-})
-
-activitySchema.pre('remove', async function(next) {
-    try {
-        await User.updateMany(
-            {activities: {'$in': this._id}},
-            { '$pull': { activities: { '$in': [this._id] }  } }
-        )
-        await Community.updateMany(
-            {activities: {'$in': this._id}},
-            { '$pull': { activities: { '$in': [this._id] } } }
-        )
-        await Community.updateMany(
-            {activities: {'$in': this._id}},
-            { '$pull': { posts: { activity: this._id } } }
-        )
-        next()
-    } catch(error) {
-        console.log(error)
-        next()
-    }
 })
 
 module.exports = mongoose.model('Activity', activitySchema)

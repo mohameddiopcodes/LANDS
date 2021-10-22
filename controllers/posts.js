@@ -1,6 +1,7 @@
 module.exports = {
     create,
     show,
+    edit,
     update,
     delete: deletePost
 }
@@ -21,30 +22,44 @@ async function create(req, res) {
 
 async function show(req, res) {
     const community = await Community.findOne({'posts._id': req.params.id})
-    const post = community.posts.find(p => p._id === req.params.id )
+    const post = community.posts.find(p => p._id.toString() === req.params.id )
     res.render('posts/show', { post })
 }
 
-function update(req, res) {
-    req.body._id = req.params.id
-    Community.updateOne(
-        { 'posts.id': req.params.id },
-        {'$set': {'posts.$': req.body} },
-        function(error, community) {
-            if(error) res.redirect(`/posts/${req.params.id}`)
-            res.redirect(`/communities/${community._id}`)
-        }
-    )
-    
+async function edit(req, res) {
+    try {
+        const community = await Community.findOne({'posts._id': req.params.id})
+        const post = community ? community.posts.find(p => p._id.toString() === req.params.id ):{}
+        res.render('posts/edit', { post, communityId: community._id })
+    } catch(error) {
+        console.log(error)
+        res.redirect('/communities')
+    }
 }
 
-function deletePost(req, res) {
-    Community.updateOne(
-        { 'posts.id': req.params.id },
-        { '$pull': { 'posts.id': { '$in': req.params.id } } },
-        function(error, community) {
-            if(error) res.redirect(`/posts/${req.params.id}`)
-            res.redirect(`/communities/${community._id}`)
-        }
-    )
+async function update(req, res) {
+    try {
+        req.body.from = req.user
+        const community = await Community.findOne({'posts._id': req.params.id})
+        let postId = community.posts.findIndex(p => p._id.toString() === req.params.id )
+        community.posts.splice(postId, postId+1, req.body)
+        await community.save()
+        res.redirect(`/communities/${community._id}`)
+    } catch(error) {
+        console.log(error)
+        res.redirect(`/posts/${req.params.id}/edit`)
+    } 
+}
+
+async function deletePost(req, res) {
+    try {
+        const community = await Community.findOne({'posts._id': req.params.id})
+        let postId = community.posts.findIndex(p => p._id.toString() === req.params.id )
+        community.posts.splice(postId, postId+1)
+        await community.save()
+        res.redirect(`/communities/${community._id}`)
+    } catch(error) {
+        console.log(error)
+        res.redirect(`/posts/${req.params.id}/edit`)
+    } 
 }
